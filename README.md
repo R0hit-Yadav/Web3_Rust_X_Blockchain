@@ -499,3 +499,154 @@ Proof Verification: true
 - The project assumes input data as UTF-8 strings converted to bytes, but you can modify it to accept raw bytes or other formats.
 - For production use, consider adding error handling for invalid inputs or hash computation failures.
 - The implementation sorts sibling hashes (smaller on the left) to ensure consistency, which is a common practice in Merkle Trees.
+
+
+# 6️⃣.🌐Libp2p Peer-to-Peer Networking in Rust
+
+This project showcases a modular and extensible implementation of peer-to-peer (P2P) networking using the libp2p crate in Rust. It includes multiple features like ping, peer identification, chat, distributed key-value storage, and file sharing over a decentralized network.
+
+## 🚀 Features
+- Ping: Test connectivity with other peers using the ping protocol.
+- Identify: Discover and display peer identity information (e.g., public key, supported protocols).
+- Chat: Real-time messaging between peers using the gossipsub protocol.
+- Distributed Key-Value Store: Store and retrieve key-value pairs across the network with Kademlia DHT.
+- Distributed File Sharing: Share and retrieve files in a decentralized manner, with local persistence using sled.
+- Modular design with separate modules for each functionality.
+
+## 📦 Dependencies
+Ensure you have Rust installed. You need the following Rust crates:
+
+```toml
+[dependencies]
+async-std = "1.13.0"
+async-trait = "0.1.87"
+base64 = "0.22.1"
+bincode = {version = "1.3"}
+futures = "0.3.31"
+libp2p = {version = "0.55.0",features = ["request-response","noise","kad", "ping", "tcp", "tokio", "yamux","mdns","floodsub","macros","gossipsub","identify"]}
+serde = {version = "1.0.219",features = ["derive"]}
+serde_json = "1.0.140"
+sled = "0.34.7"
+tokio = {version = "1.44.0",features = ["full"]}
+tracing = "0.1.41"
+tracing-subscriber = {version = "0.3.19",features = ["env-filter"]}
+```
+
+## 🛠 Setup
+Clone the repository:
+
+```sh
+git clone https://github.com/R0hit-Yadav/Web3_Rust_X_Blockchain.git
+cd libp2p
+```
+
+## ▶️ Compile and Run
+
+```sh
+cargo run
+
+Enter
+1. Ping
+2. Identify
+3. Chat
+4. Distributed Key Value
+5. Distributed Key File
+
+```
+
+## 📜 How It Works
+
+### 1️⃣ Ping
+- Establishes a connection with a peer and measures round-trip time using the ping protocol.
+- Listens on all interfaces (/ip4/0.0.0.0/tcp/0) and dials a peer if an address is provided as an argument.
+
+### 2️⃣ Identify
+- Discovers peers and retrieves their identity details (e.g., public key, protocol version, listen addresses).
+- Useful for debugging and understanding the network topology.
+
+### 3️⃣ Chat
+- Implements a gossip-based chat system using gossipsub.
+- Discovers local peers with mdns and broadcasts messages to subscribed topics.
+
+### 4️⃣ Distributed Key-Value Store
+- Uses Kademlia DHT to store and retrieve key-value pairs across the network.
+- Supports commands like PUT <key> <value>, GET <key>, and provider discovery.
+
+### 5️⃣ Distributed File Sharing
+- Extends the key-value store to handle file storage and retrieval.
+- Stores files locally in a sled database and shares them over the DHT.
+- Commands: PUT_FILE <key> <file_path>, GET_FILE <key>, LIST_FILE, LIST_PEERS.
+
+
+## 🧠 What You Will Learn
+- How to build a P2P network using libp2p in Rust.
+- Implementing peer discovery with mdns and Kademlia DHT.
+- Broadcasting messages with gossipsub.
+- Storing and retrieving distributed data with Kademlia.
+- Handling file sharing in a decentralized system with local persistence.
+
+## ⚡ Example Output
+
+- Ping 
+```yaml
+Listening on /ip4/127.0.0.1/tcp/12345
+Dialed /ip4/192.168.1.10/tcp/54321
+PingEvent { peer: PeerId("12D3KooW..."), result: Ok(PingSuccess { rtt: 12ms }) }
+```
+
+- Identify
+```yaml
+Listening on /ip4/127.0.0.1/tcp/12345
+Dialed /ip4/192.168.1.10/tcp/54321
+=== Received Peer Identity ===
+Public Key       : Ed25519(PublicKey("..."))
+Protocol Version : /ipfs/id/1.0.0
+Agent Version    : libp2p/0.53.0
+Listen Addresses :
+  - /ip4/192.168.1.10/tcp/54321
+Supported Protocols:
+  - /ipfs/ping/1.0.0
+  - /ipfs/id/1.0.0
+Observed Address : /ip4/127.0.0.1/tcp/12345
+=================================
+```
+
+- Chat
+```yaml
+Listening on /ip4/127.0.0.1/tcp/12345
+Enter message: Hello, world!
+mDNS discovered new peer: 12D3KooW...
+=======================
+Received Message: 'Hello, world!'
+From
+Id: 123456789
+Source: 12D3KooW...
+=======================
+```
+
+- Distributed Key-Value
+```yaml
+Local Peer ID: 12D3KooW...
+Listening in /ip4/127.0.0.1/tcp/12345
+PUT mykey myvalue
+Successfully put record "mykey"
+GET mykey
+Got record "mykey" "myvalue"
+```
+
+- Distributed File Sharing
+```yaml
+Local Peer ID: 12D3KooW...
+Listening on /ip4/127.0.0.1/tcp/12345
+PUT_FILE myfile ./example.txt
+File stored with key: myfile
+GET_FILE myfile
+File retrieved and saved as: retrieved_myfile
+LIST_FILE
+Stored files:
+Key: myfile | File Name: example.txt
+LIST_PEERS
+Connected peers:
+12D3KooW...
+```
+
