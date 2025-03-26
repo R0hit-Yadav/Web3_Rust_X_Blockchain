@@ -106,3 +106,85 @@ Stored Value in Contract: 100
 ## 📌 Notes
 - Always keep your private keys secure and never expose them in public repositories.
 - Use a testnet (like infura) for development instead of mainnet to avoid spending real ETH.
+
+
+
+# 2️⃣.Ethereum Wallet & Real-time Transaction Tracker in Rust
+
+This project demonstrates how to interact with the Ethereum blockchain using Rust. It allows you to track transactions to a specific Ethereum address in real-time using WebSockets and the `web3` crate.
+
+## 🚀 Features
+- Connect to Ethereum via WebSockets.
+- Monitor new blocks and fetch transactions.
+- Track incoming transactions to a specific Ethereum address.
+- Convert transaction values from Gwei to ETH.
+
+## 📦 Dependencies
+Ensure you have Rust installed. You need the following Rust crates:
+
+```toml
+[dependencies]
+dotenv = "0.15.0"
+ethers = "2.0.14"
+futures = "0.3.31"
+hex = "0.4.3"
+serde = "1.0.217"
+serde_json = "1.0.138"
+tokio = {version = "1.43.0",features = ["full"]}
+tokio-stream = "0.1.17"
+web3 = "0.19.0"
+```
+
+## 🛠 Setup
+Clone the repository:
+
+```sh
+git clone https://github.com/R0hit-Yadav/Web3_Rust_X_Blockchain.git
+cd tx_tracker
+```
+
+Create a `.env` file in the project root and add the following:
+
+```ini
+ETHEREUM_WS_URL="wss://mainnet.infura.io/ws/v3/YOUR_INFURA_PROJECT_ID"
+```
+
+## ▶️ Compile and Run
+
+```sh
+cargo run
+```
+
+## 📜 How It Works
+
+### 1️⃣ Connect to an Ethereum Node
+- Uses `ETHEREUM_WS_URL` from `.env` to establish a WebSocket connection.
+
+### 2️⃣ Monitor New Blocks
+- Subscribes to new block headers and retrieves block details.
+
+### 3️⃣ Track Transactions to a Specific Address
+- Iterates through transactions in each new block.
+- Filters transactions matching `TARGET_ADDRESS.`
+- Converts transaction values to ETH and logs the details.
+
+## 🧠 What You Will Learn
+- Connecting Rust to Ethereum via WebSockets.
+- Subscribing to blockchain events in real-time.
+- Fetching and filtering transactions using `web3`.
+- Handling asynchronous operations with `tokio`.
+
+## ⚡ Example Output
+```yaml
+Listening for transactions to: 0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49
+
+Block Number: 18834567
+Incoming Tx: 0xabc123...
+   From: 0xdef456...
+   Amount: 0.5 ETH
+```
+
+## 📌 Notes
+- Always use a WebSocket provider like Infura for real-time updates.
+- Keep your .env file secure and never expose API keys.
+- Use testnets for development to avoid real ETH expenses.
