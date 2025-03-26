@@ -1,0 +1,15 @@
+[package]
+name = "web3_eth_wallet"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenv = "0.15.0"
+ethers = "2.0.14"
+futures = "0.3.31"
+hex = "0.4.3"
+serde = "1.0.217"
+serde_json = "1.0.138"
+tokio = {version = "1.43.0",features = ["full"]}
+tokio-stream = "0.1.17"
+web3 = "0.19.0"
