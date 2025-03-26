@@ -650,3 +650,113 @@ Connected peers:
 12D3KooW...
 ```
 
+# 6️⃣.🦀Rust Distributed File System (DFS)
+
+This project implements a Distributed File System (DFS) in Rust using the libp2p library. It leverages the Kademlia Distributed Hash Table (DHT) for decentralized file storage and retrieval, with local persistence using sled and an HTTP interface powered by warp for easy file access. The system supports file uploads, downloads, and peer discovery, making it a robust foundation for a P2P file-sharing network.
+
+## 🚀 Features
+- File Storage: Store files in the DHT with automatic key generation (SHA-256 hash) or custom keys.
+- File Retrieval: Retrieve files from the DHT or local sled cache via command-line or HTTP.
+- Local Persistence: Files are cached locally using the sled embedded database.
+- Peer Discovery: Automatically discover peers on the local network using mdns.
+- HTTP Interface: Access files via a web server running at http://127.0.0.1:8080/file/<key>.
+- Command-Line Interface: Manage files with simple commands like PUT_FILE, GET_FILE, and LIST_FILE.
+
+## 📦 Dependencies
+Ensure you have Rust installed. You need the following Rust crates:
+
+```toml
+[dependencies]
+async-std = "1.13.0"
+async-trait = "0.1.87"
+base64 = "0.22.1"
+bincode = {version = "1.3"}
+blake3 = "1.7.0"
+futures = "0.3.31"
+libp2p = {version = "0.55.0",features = ["request-response","noise","kad", "ping", "tcp", "tokio", "yamux","mdns","floodsub","macros","gossipsub","identify"]}
+serde = {version = "1.0.219",features = ["derive"]}
+serde_json = "1.0.140"
+sha2 = "0.10.8"
+sled = "0.34.7"
+tokio = {version = "1.44.0",features = ["full"]}
+tracing = "0.1.41"
+tracing-subscriber = {version = "0.3.19",features = ["env-filter"]}
+warp = "0.3.7"
+```
+
+## 🛠 Setup
+Clone the repository:
+
+```sh
+git clone https://github.com/R0hit-Yadav/Web3_Rust_X_Blockchain.git
+cd rust_dfs
+```
+
+## ▶️ Compile and Run
+
+```sh
+cargo run
+
+```
+
+## 📜 How It Works
+
+### 1️⃣ Libp2p Swarm
+- Uses TCP transport with Noise encryption and Yamux multiplexing.
+- Combines Kademlia DHT (kad) and mdns for peer discovery and file storage.
+- Runs in server mode to provide records to the network.
+
+### 2️⃣ Sled Database
+- Stores files locally with keys and metadata.
+- Persists data across restarts.
+
+### 3️⃣ Warp HTTP Server
+- Checks the local sled database and returns file content with appropriate headers.
+
+### 4️⃣ Command-Line interface
+- Accepts commands like PUT_FILE, GET_FILE, LIST_FILE, and LIST_PEERS.
+- Interacts with the DHT and local storage.
+
+
+## 🧠 What You Will Learn
+- How to build a P2P network using libp2p in Rust.
+- Implementing peer discovery with mdns and Kademlia DHT.
+- Broadcasting messages with gossipsub.
+- Storing and retrieving distributed data with Kademlia.
+- Handling file sharing in a decentralized system with local persistence.
+
+## ⚡ Example Output
+
+- sStoring File
+```yaml
+PUT_FILE ./example.txt
+File stored with key: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+Retrieve via: http://127.0.0.1:8080/file/2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+```
+
+- Retrieving a File
+```yaml
+GET_FILE 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+http://127.0.0.1:8080/file/2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+File retrieved from sled and saved as: retrieved_2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+
+http://127.0.0.1:8080/file/2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+```
+
+- Listing Files
+```yaml
+LIST_FILE
+Stored files:
+Key: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824 | File Name: example.txt
+Key: 2cf24dba5fb0a30e26e83b5d5d5r5f5s5s5ef5f5f5d5fe55d5s5s5f5e5f5sa55 | File Name: demo.txt
+Key: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824 | File Name: rust.txt
+```
+
+- Listing Peers
+```yaml
+LIST_PEERS
+Connected peers:
+12D3KooWRy5rVqw4eVkTRqaHFYcCSmQovFPFwtTur4QqkRAP5FCC
+12D3KooWFyCq3UgYmVUCqXhCWtKxhUrykKadd8PfGxWtrjnpZp5V
+```
+
