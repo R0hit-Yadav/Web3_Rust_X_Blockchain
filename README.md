@@ -393,3 +393,109 @@ size json                         time:   [2.345 ns 2.456 ns 2.567 ns]
 - The SampleData struct in the provided code is minimal (id: 1, name: "H", ...). For more realistic results, consider using larger or more complex data (e.g., the commented-out version in lib.rs).
 - Benchmark results may vary based on system specifications and Rust compiler optimizations.
 - Ensure you have sufficient memory and CPU resources when running benchmarks with large datasets.
+
+
+# 5️⃣.Rust Merkle Tree Implementation
+
+This project implements a Merkle Tree in Rust, a data structure commonly used in cryptography and blockchain applications to efficiently verify data integrity. It supports multiple hash functions (SHA-256, SHA-512, and Blake2b) and includes functionality to generate proofs and verify them.
+
+## 🚀 Features
+- Construct a Merkle Tree from a list of input leaves (byte vectors).
+- Support for multiple hash functions: SHA-256, SHA-512, and Blake2b.
+- Compute the Merkle Root of the tree.
+- Generate inclusion proofs for specific leaves.
+- Verify proofs against the Merkle Root.
+- Interactive command-line interface to input leaves and select hash functions.
+
+## 📦 Dependencies
+Ensure you have Rust installed. You need the following Rust crates:
+
+```toml
+[dependencies]
+blake2 = "0.10.6"
+digest = "0.10.7"
+hex = "0.4.3"
+md-5 = "0.10.6"
+ripemd160 = "0.10.0"
+sha2 = "0.10.8"
+```
+
+## 🛠 Setup
+Clone the repository:
+
+```sh
+git clone https://github.com/R0hit-Yadav/Web3_Rust_X_Blockchain.git
+cd merkle_tree
+```
+
+## ▶️ Compile and Run
+
+```sh
+cargo run
+```
+
+## 📜 How It Works
+
+### 1️⃣ Define Hashers
+- A Hasher trait is implemented for SHA-256, SHA-512, and Blake2b, allowing flexible hash function selection.
+
+### 2️⃣ Build the Merkle Tree
+- Takes a vector of byte arrays (Vec<Vec<u8>>) as leaves.
+- Computes hashes for each leaf and iteratively combines them into parent nodes until the root is derived.
+- Ensures smaller hashes are placed on the left for consistency.
+
+### 3️⃣ Compute the Merkle Root
+- The root hash is calculated by recursively hashing pairs of nodes from the bottom up.
+
+### 4️⃣ Verify Proofs
+- Verifies a proof by recomputing the root from a leaf and its proof, comparing it to the provided root.
+
+
+## 🧠 What You Will Learn
+- How to implement a Merkle Tree in Rust with generic hash functions.
+- Using traits to abstract over different hash algorithms.
+- Generating and verifying cryptographic proofs.
+- Working with Rust’s standard library for I/O and byte manipulation.
+- Structuring a Rust project with a library (lib.rs) and binary (main.rs).
+
+## ⚡ Example Output
+```yaml
+Enter number of leaves:
+4
+Enter data for leaf 1:
+apple
+Enter data for leaf 2:
+banana
+Enter data for leaf 3:
+cherry
+Enter data for leaf 4:
+date
+Choose hash function 
+1.SHA-256
+2.SHA-512
+3.Blake2b
+1
+
+Leaf 1 : "3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea"
+Leaf 2 : "e80b5017098950fc58aad83c8c14978e696095b16b7e997b65c57d8e86f9e317"
+Leaf 3 : "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfea"
+Leaf 4 : "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+
+Level 0 (Leaves): ["3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea", "e80b5017098950fc58aad83c8c14978e696095b16b7e997b65c57d8e86f9e317", "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfea", "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"]
+
+Level 1: [("3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea", "e80b5017098950fc58aad83c8c14978e696095b16b7e997b65c57d8e86f9e317"), ("2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfea", "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d")]
+
+Level 2: [("6e8e228fb3e6532dffa25d7c43f09adbfbf5b621f0a695d8cf0b23bd8e819ae5", "e5c6f3e2e260e575cc4f13e5f6f399abdf5e63e6e8b8c69ebfc2c7f5e3eabf2b")]
+
+Merkle Root: 8f8e2e6b5e2a2f5e7b8c9d4f5a6e7b8c9d4f5a6e7b8c9d4f5a6e7b8c9d4f5a6e
+
+Proof for LEAF 1: [("3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea", "e80b5017098950fc58aad83c8c14978e696095b16b7e997b65c57d8e86f9e317"), ("e5c6f3e2e260e575cc4f13e5f6f399abdf5e63e6e8b8c69ebfc2c7f5e3eabf2b")]
+Hash: "8f8e2e6b5e2a2f5e7b8c9d4f5a6e7b8c9d4f5a6e7b8c9d4f5a6e7b8c9d4f5a6e"
+Proof Verification: true
+...
+```
+
+## 📌 Notes
+- The project assumes input data as UTF-8 strings converted to bytes, but you can modify it to accept raw bytes or other formats.
+- For production use, consider adding error handling for invalid inputs or hash computation failures.
+- The implementation sorts sibling hashes (smaller on the left) to ensure consistency, which is a common practice in Merkle Trees.
