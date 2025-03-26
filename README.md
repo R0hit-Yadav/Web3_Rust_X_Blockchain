@@ -297,3 +297,99 @@ Stored Value at that Time: 5
 .....
 ```
 
+
+# 4️⃣.Rust Serialization Benchmark
+
+This project benchmarks the performance of various serialization and deserialization libraries in Rust using the criterion framework. It compares libraries like bincode, bcs, serde_json, borsh, rmp-serde, and protobuf in terms of speed and output size.
+
+## 🚀 Features
+- Benchmark serialization speed for multiple Rust libraries.
+- Benchmark deserialization speed for the same libraries.
+- Measure the size of serialized data for each library.
+- Use a custom SampleData struct to simulate real-world data.
+- Generate detailed performance reports with criterion.
+
+## 📦 Dependencies
+Ensure you have Rust installed. You need the following Rust crates:
+
+```toml
+[dependencies]
+bcs = "0.1.6"
+bincode = "1.3.3"
+borsh = { version = "1.5.5", features = ["derive"] }
+prost = { version = "0.13.5", features = ["derive"] }
+prost-types = "0.13.5"
+protobuf = "3.7.1"
+rmp-serde = "1.3.0"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[build-dependencies]
+prost-build = "0.13.5"
+```
+
+## 🛠 Setup
+Clone the repository:
+
+```sh
+git clone https://github.com/R0hit-Yadav/Web3_Rust_X_Blockchain.git
+cd benchmark
+```
+
+## ▶️ Compile and Run
+
+```sh
+cargo bench
+```
+
+## 📜 How It Works
+
+### 1️⃣ Define Sample Data
+- A SampleData struct is defined in lib.rs with fields for id, name, active, and values.
+- The sample_data() function generates an instance of this struct for testing.
+
+### 2️⃣ Serialization Benchmarks
+- Measures the time taken to serialize SampleData using bincode, bcs, serde_json, borsh, rmp-serde, and protobuf.
+- Uses black_box to prevent compiler optimizations from skewing results.
+
+### 3️⃣ Deserialization Benchmarks
+- Measures the time taken to deserialize the serialized data back into SampleData for each library.
+
+### 4️⃣ Size Benchmarks
+- Calculates and compares the size (in bytes) of the serialized output for each library.
+
+### 5️⃣ Benchmark Grouping
+- Uses criterion_group to organize benchmarks into serialization, deserialization, and size categories.
+- Reports throughput in bytes for serialization tasks.
+
+
+## 🧠 What You Will Learn
+- How to use the criterion framework for benchmarking in Rust.
+- Comparing performance characteristics of popular serialization libraries.
+- Measuring throughput and execution time for serialization/deserialization tasks.
+- Handling protocol buffers (protobuf) and other binary formats in Rust.
+- Structuring a Rust project with benchmarks and dependencies.
+
+## ⚡ Example Output
+```yaml
+Serialization/bincode serialize   time:   [12.345 µs 12.567 µs 12.789 µs]
+Serialization/bcs serialize       time:   [15.678 µs 15.890 µs 16.123 µs]
+Serialization/serde_json serialize time: [25.432 µs 25.678 µs 25.901 µs]
+...
+
+Deserialization/bincode deserialize time: [10.234 µs 10.456 µs 10.678 µs]
+Deserialization/bcs deserialize   time:   [13.567 µs 13.789 µs 14.012 µs]
+...
+
+size bincode                      time:   [1.234 ns 1.345 ns 1.456 ns]
+size json                         time:   [2.345 ns 2.456 ns 2.567 ns]
+...
+```
+
+## 📌 Notes
+- The SampleData struct in the provided code is minimal (id: 1, name: "H", ...). For more realistic results, consider using larger or more complex data (e.g., the commented-out version in lib.rs).
+- Benchmark results may vary based on system specifications and Rust compiler optimizations.
+- Ensure you have sufficient memory and CPU resources when running benchmarks with large datasets.
