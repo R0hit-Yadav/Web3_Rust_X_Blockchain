@@ -1,0 +1,19 @@
+[package]
+name = "cross_chain"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dotenv = "0.15.0"
+ethers = "2.0.14"
+eyre = "0.6.12"
+hex = "0.4.3"
+tokio = {version = "1.44.1",features = ["full"]}
+
+[[bin]]
+name = "sender"
+path = "src/main.rs"
+
+[[bin]]
+name = "receiver"
+path = "src/receiver.rs"
