@@ -1,0 +1,94 @@
+Rust Programming Language 🦀
+Rust is a blazingly fast, memory-safe, and concurrent systems programming language that is growing in popularity for everything from embedded systems to blockchain development. It was created by Mozilla and is now maintained by the Rust Foundation.
+
+Key Features of Rust
+Memory Safety Without Garbage Collection
+
+Rust uses ownership, borrowing, and lifetimes to manage memory safely at compile time, eliminating common issues like null pointer dereferences and data races.
+
+Performance Like C/C++
+
+Since Rust avoids garbage collection and offers fine-grained memory control, it performs on par with C and C++ while being safer.
+
+Concurrency Without Fear
+
+Rust’s strict ownership model ensures safe concurrent programming by preventing data races at compile time.
+
+Zero-Cost Abstractions
+
+Rust lets you write high-level code without sacrificing low-level control, making it as fast as manually optimized C code.
+
+Modern Tooling & Package Management
+
+Cargo (Rust's package manager) makes dependency management, building, and testing super easy.
+
+Rustfmt and Clippy help maintain clean and idiomatic code.
+
+WebAssembly (Wasm) Support
+
+Rust can compile to WebAssembly, making it ideal for high-performance web applications.
+
+Safe and Expressive Error Handling
+
+Uses Result<T, E> and Option<T> types instead of exceptions, encouraging developers to handle errors explicitly.
+
+Rust Syntax Basics
+Here's a simple "Hello, World!" program in Rust:
+
+rust
+Copy
+Edit
+fn main() {
+    println!("Hello, world!");
+}
+Variables & Mutability:
+
+rust
+Copy
+Edit
+fn main() {
+    let x = 5; // Immutable
+    let mut y = 10; // Mutable
+    y += 5;
+    println!("x: {}, y: {}", x, y);
+}
+Ownership & Borrowing:
+
+rust
+Copy
+Edit
+fn main() {
+    let s = String::from("Hello");
+    takes_ownership(s);
+    // println!("{}", s); // ERROR: s is moved and no longer valid
+
+    let x = 42;
+    makes_copy(x);
+    println!("{}", x); // x is still valid
+}
+
+fn takes_ownership(some_string: String) {
+    println!("{}", some_string);
+}
+
+fn makes_copy(some_integer: i32) {
+    println!("{}", some_integer);
+}
+Where is Rust Used?
+Systems Programming (OS development, embedded systems)
+
+Blockchain & Web3 (ethers-rs, Substrate for building blockchains)
+
+WebAssembly (Wasm) (High-performance frontend applications)
+
+Game Development (Bevy engine)
+
+Networking & Cloud Computing (tokio, warp, hyper)
+
+CLI Tools & Utilities (clap, tui-rs for terminal UIs)
+
+Why Learn Rust?
+✔ Prevents memory leaks & segmentation faults
+✔ Ideal for high-performance & low-level programming
+✔ Increasingly used in blockchain, cloud, and embedded systems
+✔ Strong community support and growing job demand

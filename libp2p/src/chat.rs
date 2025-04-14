@@ -81,7 +81,7 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
                     println!("=======================");                
                 }
                 SwarmEvent::NewListenAddr { address, .. } => {
-                    println!("Listening on {address}");
+                    println!("Listening on {address}"); 
                 }
                 _ => {}
             }
