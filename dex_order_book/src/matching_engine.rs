@@ -1,18 +1,14 @@
-use crate::{order::Order,order_book::SimpleOrderBook,trade::Trade,traits::TradeListener};
+use crate::{order::Order,order_book::SimpleOrderBook,trade::Trade,traits::{OrderBook,TradeListener}};
 
-pub struct MatchingEngine<T:TradeListener>
-{
-    order_book:SimpleOrderBook,
-    trade_listener:T,
+pub struct MatchingEngine<B: OrderBook, T: TradeListener> {
+    pub order_book: B,
+    pub trade_listener: T,
 }
 
-impl<T:TradeListener> MatchingEngine<T>
-{
-    pub fn new(trade_listener:T)->Self
-    {
-        Self 
-        {
-            order_book:SimpleOrderBook::new(),
+impl<B: OrderBook, T: TradeListener> MatchingEngine<B, T> {
+    pub fn new(order_book: B, trade_listener: T) -> Self {
+        Self {
+            order_book,
             trade_listener,
         }
     }
@@ -23,5 +19,21 @@ impl<T:TradeListener> MatchingEngine<T>
         for trade in &trades {
             self.trade_listener.on_trade(&trade);
         }
+    }
+
+    pub fn cancel(&mut self, order_id: u64) -> bool {
+        self.order_book.cancel_order(order_id)
+    }
+
+    pub fn best_bid(&self) -> Option<Order> {
+        self.order_book.best_bid()
+    }
+
+    pub fn best_ask(&self) -> Option<Order> {
+        self.order_book.best_ask()
+    }
+
+    pub fn book_depth(&self) -> (Vec<&Order>, Vec<&Order>) {
+        self.order_book.full_depth()
     }
 }

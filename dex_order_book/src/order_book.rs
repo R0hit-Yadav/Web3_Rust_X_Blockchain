@@ -1,5 +1,5 @@
 use std::collections::{BTreeMap,VecDeque};
-use crate::{order::{Order,OrderSide},trade::Trade};
+use crate::{order::{Order,OrderSide},trade::Trade,traits::OrderBook};
 
 pub struct SimpleOrderBook
 {
@@ -16,24 +16,25 @@ impl SimpleOrderBook{
             asks:BTreeMap::new(),
         }
     }
-
-    pub fn add_order(&mut self,order:Order)-> Vec<Trade>
-    {
+}
+    impl OrderBook for SimpleOrderBook {
+    fn add_order(&mut self, order: Order) -> Vec<Trade> {
         let mut trades = Vec::new();
-        let target_book= match order.side 
-        {
+        let target_book = match order.side {
             OrderSide::Buy => &mut self.asks,
             OrderSide::Sell => &mut self.bids,
-
         };
 
-        let mut remaining_qty=order.quantity;
+        let mut remaining_qty = order.quantity;
+        let mut matched_prices = Vec::new();
 
-        let mut matched_prices= Vec::new();
         for (&price, orders) in target_book.iter_mut() {
-            if (order.side == OrderSide::Buy && order.price >= price)
-                || (order.side == OrderSide::Sell && order.price <= price)
-            {
+            let price_match = match order.side {
+                OrderSide::Buy => order.price >= price,
+                OrderSide::Sell => order.price <= price,
+            };
+
+            if price_match {
                 while let Some(mut target_order) = orders.pop_front() {
                     let exec_qty = remaining_qty.min(target_order.quantity);
                     remaining_qty -= exec_qty;
@@ -83,21 +84,30 @@ impl SimpleOrderBook{
         trades
     }
 
-    pub fn cancel_order(&mut self,_order_id:u64)-> bool 
-    {
+    fn cancel_order(&mut self, order_id: u64) -> bool {
+        for book in [&mut self.bids, &mut self.asks] {
+            for (_price, orders) in book.iter_mut() {
+                if let Some(pos) = orders.iter().position(|o| o.id == order_id) {
+                    orders.remove(pos);
+                    return true;
+                }
+            }
+        }
         false
     }
 
-    pub fn best_bid(&self)-> Option<&Order>
-    {
-        self.bids.iter().rev().next().and_then(|(_, v)| v.front())
+    fn best_bid(&self) -> Option<Order> {
+        self.bids.iter().rev().next().and_then(|(_, v)| v.front().cloned())
     }
 
-    pub fn full_depth(&self)-> (Vec<&Order>,Vec<&Order>)
-    {
+    fn best_ask(&self) -> Option<Order> {
+        self.asks.iter().next().and_then(|(_, v)| v.front().cloned())
+    }
+
+    fn full_depth(&self) -> (Vec<&Order>, Vec<&Order>) {
         let bids = self.bids.values().flat_map(|v| v.iter()).collect();
         let asks = self.asks.values().flat_map(|v| v.iter()).collect();
         (bids, asks)
     }
-
+    
 }
