@@ -1,23 +1,24 @@
-use std::collections::{BTreeMap,VecDeque};
-use crate::{order::{Order,OrderSide},trade::Trade,traits::OrderBook};
+use crate::{
+    order::{Order, OrderSide},
+    trade::Trade,
+    traits::OrderBook,
+};
+use std::collections::{BTreeMap, VecDeque};
 
-pub struct SimpleOrderBook
-{
-    pub bids:BTreeMap<u64,VecDeque<Order>>,
-    pub asks:BTreeMap<u64,VecDeque<Order>>,
+pub struct SimpleOrderBook {
+    pub bids: BTreeMap<u64, VecDeque<Order>>,
+    pub asks: BTreeMap<u64, VecDeque<Order>>,
 }
 
-impl SimpleOrderBook{
-    pub fn new()->Self 
-    {
-        Self 
-        {
-            bids:BTreeMap::new(),
-            asks:BTreeMap::new(),
+impl SimpleOrderBook {
+    pub fn new() -> Self {
+        Self {
+            bids: BTreeMap::new(),
+            asks: BTreeMap::new(),
         }
     }
 }
-    impl OrderBook for SimpleOrderBook {
+impl OrderBook for SimpleOrderBook {
     fn add_order(&mut self, order: Order) -> Vec<Trade> {
         let mut trades = Vec::new();
         let target_book = match order.side {
@@ -41,8 +42,16 @@ impl SimpleOrderBook{
                     target_order.quantity -= exec_qty;
 
                     trades.push(Trade {
-                        buy_order_id: if order.side == OrderSide::Buy { order.id } else { target_order.id },
-                        sell_order_id: if order.side == OrderSide::Sell { order.id } else { target_order.id },
+                        buy_order_id: if order.side == OrderSide::Buy {
+                            order.id
+                        } else {
+                            target_order.id
+                        },
+                        sell_order_id: if order.side == OrderSide::Sell {
+                            order.id
+                        } else {
+                            target_order.id
+                        },
                         price,
                         quantity: exec_qty,
                         timestamp: order.timestamp,
@@ -78,7 +87,10 @@ impl SimpleOrderBook{
                 OrderSide::Sell => &mut self.asks,
             };
             let entry = book.entry(order.price).or_insert_with(VecDeque::new);
-            entry.push_back(Order { quantity: remaining_qty, ..order });
+            entry.push_back(Order {
+                quantity: remaining_qty,
+                ..order
+            });
         }
 
         trades
@@ -97,11 +109,18 @@ impl SimpleOrderBook{
     }
 
     fn best_bid(&self) -> Option<Order> {
-        self.bids.iter().rev().next().and_then(|(_, v)| v.front().cloned())
+        self.bids
+            .iter()
+            .rev()
+            .next()
+            .and_then(|(_, v)| v.front().cloned())
     }
 
     fn best_ask(&self) -> Option<Order> {
-        self.asks.iter().next().and_then(|(_, v)| v.front().cloned())
+        self.asks
+            .iter()
+            .next()
+            .and_then(|(_, v)| v.front().cloned())
     }
 
     fn full_depth(&self) -> (Vec<&Order>, Vec<&Order>) {
@@ -109,5 +128,4 @@ impl SimpleOrderBook{
         let asks = self.asks.values().flat_map(|v| v.iter()).collect();
         (bids, asks)
     }
-    
 }

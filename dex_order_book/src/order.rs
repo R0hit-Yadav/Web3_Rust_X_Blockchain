@@ -1,13 +1,11 @@
-#[derive(Debug, Clone, PartialEq,Eq)]
-pub enum OrderSide
-{
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum OrderSide {
     Buy,
     Sell,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum OrderType
-{
+pub enum OrderType {
     Limit,
     Market,
     PostOnly,
@@ -15,8 +13,7 @@ pub enum OrderType
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Order
-{
+pub struct Order {
     pub id: u64,
     pub user_id: u64,
     pub side: OrderSide,

@@ -1,4 +1,9 @@
-use crate::{order::Order,order_book::SimpleOrderBook,trade::Trade,traits::{OrderBook,TradeListener}};
+use crate::{
+    order::Order,
+    order_book::SimpleOrderBook,
+    trade::Trade,
+    traits::{OrderBook, TradeListener},
+};
 
 pub struct MatchingEngine<B: OrderBook, T: TradeListener> {
     pub order_book: B,
@@ -13,8 +18,7 @@ impl<B: OrderBook, T: TradeListener> MatchingEngine<B, T> {
         }
     }
 
-    pub fn place_order(&mut self,order:Order)
-    {
+    pub fn place_order(&mut self, order: Order) {
         let trades = self.order_book.add_order(order);
         for trade in &trades {
             self.trade_listener.on_trade(&trade);

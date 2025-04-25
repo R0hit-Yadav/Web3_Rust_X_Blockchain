@@ -16,7 +16,6 @@ fn main() {
     let order_book = SimpleOrderBook::new();
     let mut engine = MatchingEngine::new(order_book, Logger);
 
-    
     let buy1 = Order {
         id: 1,
         user_id: 101,
@@ -43,7 +42,7 @@ fn main() {
         side: OrderSide::Buy,
         price: 100,
         quantity: 10,
-        timestamp: 1,
+        timestamp: 5,
         order_type: OrderType::Limit,
     };
 
@@ -61,9 +60,9 @@ fn main() {
         id: 12,
         user_id: 202,
         side: OrderSide::Sell,
-        price: 105,
+        price: 70,
         quantity: 10,
-        timestamp: 2,
+        timestamp: 5,
         order_type: OrderType::Limit,
     };
 
@@ -71,9 +70,9 @@ fn main() {
         id: 13,
         user_id: 203,
         side: OrderSide::Sell,
-        price: 110,
+        price: 60,
         quantity: 10,
-        timestamp: 2,
+        timestamp: 1,
         order_type: OrderType::Limit,
     };
 
@@ -83,7 +82,7 @@ fn main() {
     engine.place_order(sell1);
     engine.place_order(sell2);
     engine.place_order(sell3);
-    
+
     // show full depth
     let (bids, asks) = engine.book_depth();
     println!("Bids:");
@@ -100,6 +99,4 @@ fn main() {
     // cancel order if unmatched
     let canceled = engine.cancel(1);
     println!("Cancel Order 1: {}", canceled);
-
-
 }
