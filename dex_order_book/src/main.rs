@@ -20,30 +20,30 @@ fn main() {
         id: 1,
         user_id: 101,
         side: OrderSide::Buy,
-        price: 80,
-        quantity: 10,
+        price: 120,
+        quantity: 20,
         timestamp: 1,
-        order_type: OrderType::Limit,
+        order_type: OrderType::Market,
     };
 
     let buy2 = Order {
         id: 2,
         user_id: 102,
         side: OrderSide::Buy,
-        price: 90,
+        price: 120,
         quantity: 10,
         timestamp: 1,
-        order_type: OrderType::Limit,
+        order_type: OrderType::Market,
     };
 
     let buy3 = Order {
         id: 3,
-        user_id: 160,
+        user_id: 103,
         side: OrderSide::Buy,
-        price: 100,
+        price: 40,
         quantity: 10,
         timestamp: 5,
-        order_type: OrderType::Limit,
+        order_type: OrderType::Market,
     };
 
     let sell1 = Order {
@@ -53,27 +53,27 @@ fn main() {
         price: 100,
         quantity: 10,
         timestamp: 2,
-        order_type: OrderType::Limit,
+        order_type: OrderType::Market,
     };
 
     let sell2 = Order {
         id: 12,
         user_id: 202,
         side: OrderSide::Sell,
-        price: 70,
+        price: 100,
         quantity: 10,
-        timestamp: 5,
-        order_type: OrderType::Limit,
+        timestamp: 1,
+        order_type: OrderType::Market,
     };
 
     let sell3 = Order {
         id: 13,
         user_id: 203,
         side: OrderSide::Sell,
-        price: 60,
+        price: 300,
         quantity: 10,
         timestamp: 1,
-        order_type: OrderType::Limit,
+        order_type: OrderType::Market,
     };
 
     engine.place_order(buy1);
@@ -84,19 +84,34 @@ fn main() {
     engine.place_order(sell3);
 
     // show full depth
+    println!("");
     let (bids, asks) = engine.book_depth();
-    println!("Bids:");
+    println!("Reamining Bids:");
     for b in bids {
         println!("{:?}", b);
     }
-    println!("Asks:");
+    println!("");
+    println!("Reamining Asks:");
     for a in asks {
         println!("{:?}", a);
     }
+    println!("");
     println!("Best Bid: {:?}", engine.best_bid());
     println!("Best Ask: {:?}", engine.best_ask());
+    println!("");
 
     // cancel order if unmatched
+    println!("Cancel Orders:");
     let canceled = engine.cancel(1);
-    println!("Cancel Order 1: {}", canceled);
+    println!("Is Order 1 Canceled: {}", canceled);
+    let canceled = engine.cancel(2);
+    println!("Is Order 2 Canceled: {}", canceled);
+    let canceled = engine.cancel(3);
+    println!("Is Order 3 Canceled: {}", canceled);
+    let canceled = engine.cancel(11);
+    println!("Is Order 11 Canceled: {}", canceled);
+    let canceled = engine.cancel(12);
+    println!("Is Order 12 Canceled: {}", canceled);
+    let canceled = engine.cancel(13);
+    println!("Is Order 13 Canceled: {}", canceled);
 }

@@ -1,7 +1,5 @@
 use crate::{
     order::Order,
-    order_book::SimpleOrderBook,
-    trade::Trade,
     traits::{OrderBook, TradeListener},
 };
 
